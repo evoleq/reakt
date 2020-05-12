@@ -3,5 +3,5 @@ build
 .idea
 out
 /gradlew
-/src/
+
 /gradlew.bat
