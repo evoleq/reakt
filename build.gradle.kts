@@ -21,6 +21,14 @@ repositories {
 }
 
 kotlin {
+    js(){
+        browser {
+            dceTask {
+                keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+            }
+        }
+        
+    }
     js().compilations["main"].defaultSourceSet  {
         dependencies {
             implementation(kotlin("reflect"))
