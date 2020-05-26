@@ -31,7 +31,8 @@ open class FunctionalReaktProps<Data : RState>(
     open var data: Data,
     open var scope: CoroutineScope = CoroutineScope(Job()),
     open var forceUpdate: (ID, Data) -> Boolean = { _, _ -> false },
-    open var updateParent: (ID, suspend CoroutineScope.(Data) -> Data) -> Unit = { _, _ -> Unit }
+    open var updateParent: (ID, suspend CoroutineScope.(Data) -> Data) -> Unit = { _, _ -> Unit },
+    open var boundary: Boundary = Boundary()
 ) : RProps
 
 
