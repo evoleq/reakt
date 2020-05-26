@@ -19,7 +19,7 @@ fun apis(vararg apis: Api) = with(apis.map{Pair(it.name, it)}){
 }
 
 @Suppress("FunctionName")
-fun Browser(routes: HashMap<String,Route>): Api = Api("browse", routes)
+fun Browser(routes: HashMap<String,Route>): Api = Api("browser", routes)
 
 
 fun routes(vararg routes: Pair<String,Route>) = hashMapOf(*routes)
