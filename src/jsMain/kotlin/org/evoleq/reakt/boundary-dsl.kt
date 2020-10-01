@@ -16,13 +16,16 @@
 package org.evoleq.reakt
 
 import org.drx.configuration.Configuration
+import org.drx.dynamics.ID
 import react.RState
 
 class BoundaryConfiguration : Configuration<Boundary> {
 
     private val apis: HashMap<String, Api> by lazy { hashMapOf<String,Api>() }
 
-    override fun configure(): Boundary = Boundary(apis)
+    val translations: HashMap<ID,Translations> by lazy{ hashMapOf<ID,Translations>() }
+    
+    override fun configure(): Boundary = Boundary(apis,translations)
 
     @BoundaryDsl
     fun apis(configuration: HashMap<String,Api>.()->Unit) {
@@ -41,6 +44,14 @@ class BoundaryConfiguration : Configuration<Boundary> {
         configuration()
         name = "browser"
         this@browser[name] = configure()
+    }
+    
+    @BoundaryDsl
+    inline fun <reified Type> translations(noinline configuration: Translations.()->Unit) {
+        if(translations[Type::class] == null) {
+            translations[Type::class] = Translations()
+        }
+        translations[Type::class]!!.configuration()
     }
 }
 
@@ -81,4 +92,10 @@ class RouteConfiguration : Configuration<Route> {
 fun <Data : RState> FunctionalReaktProps<Data>.boundary(configuration: BoundaryConfiguration.()->Unit) = with(BoundaryConfiguration()) {
     configuration()
     boundary = configure()
+}
+
+@BoundaryDsl
+fun boundary(configuration: BoundaryConfiguration.()->Unit): Boundary = with(BoundaryConfiguration()) {
+    configuration()
+    configure()
 }

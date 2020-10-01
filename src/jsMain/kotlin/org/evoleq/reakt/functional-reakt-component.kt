@@ -29,6 +29,17 @@ abstract class FunctionalReaktComponent<Data : RState>(properties: FunctionalRea
         state = properties.data
     }
     
+    private val childUpdates: HashMap<ChildId<*>, (ID, suspend CoroutineScope.(Any) -> Any)->Evolving<Any>> by lazy {
+        hashMapOf<ChildId<*>, (ID, suspend CoroutineScope.(Any) -> Any) -> Evolving<Any>>()
+    }
+    
+    /**
+     *
+     */
+    fun  registerChildUpdate(): (id: ChildId<*>, update: (ID, suspend CoroutineScope.(Any) -> Any)->Evolving<Any>)->Unit = {
+        id, update -> childUpdates[id] = update
+    }
+    
     /**
      * Update the component.
      * This function
@@ -48,14 +59,41 @@ abstract class FunctionalReaktComponent<Data : RState>(properties: FunctionalRea
         }
     }
     
+    
+    /**
+     * Update a child-component
+     */
+    @EvoleqDsl
+    fun <ChildData : RState> updateChild(id: ChildId<ChildData>, childData: Data.()->ChildData) = props.scope.parallel{
+        with(childUpdates[id]!!) {
+            this(ParentId::class){ _ -> props.data.childData()}
+        }
+    }
+    
     /**
      * Called during the update-process of the component. By default, the updateParent-function is called.
      * Hint: If you override this function and still want to update the parent component you
-     * will have to call props.updateParent by yourself
+     * will have to call props.updateParent by yourself.
      */
     @EvoleqDsl
     open fun onUpdate(senderId: ID, data: Data): Data {
-        props.updateParent(senderId) { data }
+        if(senderId != ParentId::class) {
+            props.updateParent(senderId) { data }
+        }
         return data
+    }
+}
+
+class ParentId
+
+sealed class ChildId<out ChildData> {
+    data class IntId<ChildData>(val value: Int) : ChildId<ChildData>()
+    data class ClassId<ChildData>(val value: ID): ChildId<ChildData>()
+    data class StringId<ChildData>(val value: String): ChildId<ChildData>()
+    
+    companion object {
+        operator fun<ChildData> invoke(value: Int): ChildId<ChildData> = IntId(value)
+        operator fun<ChildData> invoke(value: ID): ChildId<ChildData> = ClassId(value)
+        operator fun<ChildData> invoke(value: String): ChildId<ChildData> = StringId(value)
     }
 }

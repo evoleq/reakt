@@ -86,3 +86,28 @@ tasks{
     }
 }
 
+
+//apply(from = "gradle-files/maven.publish.gradle.kts")
+
+/*
+bintray{
+    val bintrayUser: String by project
+    val bintrayKey: String by project
+    publish = true
+    setPublications("js", "kotlinMultiplatform", "metadata")
+    pkg(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.PackageConfig> {
+        repo = ""
+        name = "x"
+        userOrg = "evoleq"
+        //websiteUrl = "https://blog.simon-wirtz.de"
+        githubRepo = "evoleq/reakt"
+        vcsUrl = "https://github.com/evoleq/reakt"
+        //description = "Simple Lib for TLS/SSL socket handling written in Kotlin"
+        setLabels("kotlin")
+        setLicenses("Apache 2.0")
+        //desc = description
+    })
+}
+
+
+ */

@@ -15,11 +15,14 @@
  */
 package org.evoleq.reakt
 
+import org.drx.dynamics.ID
+
 @DslMarker
 annotation class BoundaryDsl
 
 data class Boundary(
-    val apis: Map<String, Api> = mapOf()
+    val apis: Map<String, Api> = mapOf(),
+    val translations: HashMap<ID, Translations> = hashMapOf()
 ) {
     operator fun get(api: String): Api = apis[api] ?: error("No such api: name = $api")
     operator fun get(api:String, route: String): Route = this[api][route]
@@ -59,3 +62,42 @@ fun Route.path(params: HashMap<String, String>): String {
     return tmp
 }
 
+data class Translations(
+    private val translationsIDKey: HashMap<ID,(Any)->Any> = hashMapOf(),
+    private val translationsStringKey: HashMap<String,(Any)->Any> = hashMapOf(),
+    private val translationsIntKey: HashMap<Int,(Any)->Any> = hashMapOf()
+) {
+    operator fun  set(key: ID, value: (Any) -> Any) {
+        translationsIDKey[key] = value
+    }
+    
+    operator fun set(key: String, value: (Any)->Any) {
+        translationsStringKey[key] = value
+    }
+    
+    operator fun set(key: Int, value: (Any)->Any) {
+        translationsIntKey[key] = value
+    }
+
+    operator fun get(key: ID): (Any)->Any = translationsIDKey[key]?:throw TranslationsException.Unregistered(key)
+
+    operator fun get(key: String): (Any)->Any = translationsStringKey[key]?:throw TranslationsException.Unregistered(key)
+    
+    operator fun get(key: Int): (Any)->Any = translationsIntKey[key]?:throw TranslationsException.Unregistered(key)
+}
+
+sealed class TranslationsException (override val message: String) : Exception(message) {
+    /**
+     * To be thrown when trying to access an unregistered translation
+     */
+    class Unregistered(key: String) : TranslationsException("No translations registered under '$key'!"){
+        companion object {
+            operator fun invoke(key: ID): Unregistered = Unregistered("$key")
+            operator fun invoke(key: Int): Unregistered = Unregistered("$key")
+        }
+    }
+    /**
+     * To be thrown when trying to access an unregistered type of translations in a HashMap<ID, Translations>
+     */
+    class UnknownType(type: ID) : TranslationsException("No translations of type '$type' registered")
+}

@@ -17,6 +17,7 @@ package org.evoleq.reakt
 
 import kotlinx.coroutines.CoroutineScope
 import org.drx.dynamics.ID
+import org.drx.evoleq.evolving.Evolving
 import react.RState
 
 @DslMarker
@@ -51,6 +52,12 @@ fun <Data : RState> FunctionalReaktProps<Data>.updateParent(
     updateParent = update
 }
 
+@FunctionalReaktPropsDsl
+fun <Data: RState> FunctionalReaktProps<Data>.registerChildUpdate(
+    register: (ChildId<*>, (ID, suspend CoroutineScope.(Any) -> Any)-> Evolving<Any>)->Unit
+){
+    registerChildUpdate = register
+}
 @FunctionalReaktPropsDsl
 fun <Data : RState> FunctionalReaktProps<Data>.forceUpdate(
     force: (ID, Data) -> Boolean
