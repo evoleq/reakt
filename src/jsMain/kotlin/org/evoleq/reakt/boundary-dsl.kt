@@ -89,9 +89,20 @@ class RouteConfiguration : Configuration<Route> {
 }
 
 @BoundaryDsl
-fun <Data : RState> FunctionalReaktProps<Data>.boundary(configuration: BoundaryConfiguration.()->Unit) = with(BoundaryConfiguration()) {
+fun <Data : RState> FunctionalReaktProps<Data>.boundary(
+    configuration: BoundaryConfiguration.()->Unit
+):FunctionalReaktProps<Data> = with(BoundaryConfiguration()) {
     configuration()
-    boundary = configure()
+    //boundary = configure()
+    FunctionalReaktProps(
+        this@boundary.id,
+        this@boundary.data,
+        this@boundary.scope,
+        this@boundary.forceUpdate,
+        this@boundary.updateParent,
+        this@boundary.registerChildUpdate,
+        configure()
+    )
 }
 
 @BoundaryDsl

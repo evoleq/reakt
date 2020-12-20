@@ -26,6 +26,12 @@ kotlin {
             dceTask {
                 keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
             }
+            testTask{
+                useKarma{
+                    useChromeHeadless()
+                    useFirefox()
+                }
+            }
         }
         binaries.executable()
     }
@@ -40,17 +46,24 @@ kotlin {
             implementation(Config.Dependencies.dynamicsJs)
             implementation(Config.Dependencies.configurationsJs)
             implementation("org.evoleq:mathcat-result-js:${Config.Versions.matcat}")
-
+         
+            
             //React, React DOM + Wrappers
             implementation("org.jetbrains:kotlin-react:16.13.1-pre.110-kotlin-1.4.0")
             implementation("org.jetbrains:kotlin-react-dom:16.13.1-pre.110-kotlin-1.4.0")
           //  implementation("org.jetbrains:kotlin-react-router-dom:5.1.2-pre.123-kotlin-1.4.10")
             implementation(npm("react", "16.13.1"))
             implementation(npm("react-dom", "16.13.1"))
-          //  implementation(npm("react-router-dom","5.2.0"))
+         
         }
     }
-    js().compilations["test"].defaultSourceSet {/* ... */ }
+    js().compilations["test"].defaultSourceSet {
+        dependencies{
+            implementation(kotlin("test-js"))
+            //implementation(kotlin("test-annotations-js"))
+        }
+    /* ... */
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -87,4 +100,4 @@ tasks{
 }
 
 
-//apply(from = "gradle-files/maven.publish.gradle.kts")
+apply(from = "./publish.mpp.gradle.kts")

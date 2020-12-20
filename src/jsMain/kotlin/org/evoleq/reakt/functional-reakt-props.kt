@@ -23,7 +23,8 @@ import react.RProps
 import react.RState
 
 
-open class FunctionalReaktProps<Data : RState>(
+data class FunctionalReaktProps<Data : RState>(
+    
     /**
      * Id of the Component
      */

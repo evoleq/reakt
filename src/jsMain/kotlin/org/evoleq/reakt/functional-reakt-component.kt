@@ -24,9 +24,11 @@ import react.RComponent
 import react.RState
 
 
-abstract class FunctionalReaktComponent<Data : RState>(properties: FunctionalReaktProps<Data>) : RComponent<FunctionalReaktProps<Data>, Data>(properties) {
+abstract class FunctionalReaktComponent<Data : RState>(
+    open val properties: FunctionalReaktProps<Data>
+) : RComponent<FunctionalReaktProps<Data>, Data>(properties) {
     init {
-        state = properties.data
+        state = props.data
     }
     
     private val childUpdates: HashMap<ChildId<*>, (ID, suspend CoroutineScope.(Any) -> Any)->Evolving<Any>> by lazy {
@@ -49,10 +51,10 @@ abstract class FunctionalReaktComponent<Data : RState>(properties: FunctionalRea
      * and eventually forces an update of the component.
      */
     @EvoleqDsl
-    fun update(senderId: ID, update: suspend CoroutineScope.(Data) -> Data): Evolving<Data> = props.scope.parallel {
-        with(onUpdate(senderId, update(props.data))) data@{
-            if (props.forceUpdate(senderId, this@data)) {
-                props.data = this@data
+    fun update(senderId: ID, update: suspend CoroutineScope.(Data) -> Data): Evolving<Data> = properties.scope.parallel {
+        with(onUpdate(senderId, update(properties.data))) data@{
+            if (properties.forceUpdate(senderId, this@data)) {
+                properties.data = this@data
                 forceUpdate()
             }
             this
@@ -64,9 +66,9 @@ abstract class FunctionalReaktComponent<Data : RState>(properties: FunctionalRea
      * Update a child-component
      */
     @EvoleqDsl
-    fun <ChildData : RState> updateChild(id: ChildId<ChildData>, childData: Data.()->ChildData) = props.scope.parallel{
+    fun <ChildData : RState> updateChild(id: ChildId<ChildData>, childData: Data.()->ChildData) = properties.scope.parallel{
         with(childUpdates[id]!!) {
-            this(ParentId::class){ _ -> props.data.childData()}
+            this(ParentId::class){ _ -> properties.data.childData()}
         }
     }
     
@@ -78,7 +80,7 @@ abstract class FunctionalReaktComponent<Data : RState>(properties: FunctionalRea
     @EvoleqDsl
     open fun onUpdate(senderId: ID, data: Data): Data {
         if(senderId != ParentId::class) {
-            props.updateParent(senderId) { data }
+            properties.updateParent(senderId) { data }
         }
         return data
     }

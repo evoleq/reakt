@@ -27,43 +27,84 @@ annotation class FunctionalReaktPropsDsl
 @FunctionalReaktPropsDsl
 fun <Data : RState> FunctionalReaktProps<Data>.id(
     id: ()->ID
-) {
-    this@id.id = id()
+): FunctionalReaktProps<Data> = FunctionalReaktProps(
+    id(),
+    data,
+    scope,
+    forceUpdate,
+    updateParent,
+    registerChildUpdate,
+    boundary
+)
+/*{
+    //this@id.id = id()
 }
+
+ */
 
 @FunctionalReaktPropsDsl
 fun <Data : RState> FunctionalReaktProps<Data>.scope(
     scope: ()->CoroutineScope
-) {
-    this@scope.scope = scope()
-}
+): FunctionalReaktProps<Data> = FunctionalReaktProps(
+    id,
+    data,
+    scope(),
+    forceUpdate,
+    updateParent,
+    registerChildUpdate,
+    boundary
+)
 
 @FunctionalReaktPropsDsl
 fun <Data : RState> FunctionalReaktProps<Data>.data(
     data: ()->Data
-) {
-    this@data.data = data()
-}
+): FunctionalReaktProps<Data> = FunctionalReaktProps(
+    id,
+    data(),
+    scope,
+    forceUpdate,
+    updateParent,
+    registerChildUpdate,
+    boundary
+)
 
 @FunctionalReaktPropsDsl
 fun <Data : RState> FunctionalReaktProps<Data>.updateParent(
     update: (ID, suspend CoroutineScope.(Data) -> Data) -> Unit
-) {
-    updateParent = update
-}
+): FunctionalReaktProps<Data> = FunctionalReaktProps(
+    id,
+    data,
+    scope,
+    forceUpdate,
+    update,
+    registerChildUpdate,
+    boundary
+)
 
 @FunctionalReaktPropsDsl
 fun <Data: RState> FunctionalReaktProps<Data>.registerChildUpdate(
     register: (ChildId<*>, (ID, suspend CoroutineScope.(Any) -> Any)-> Evolving<Any>)->Unit
-){
-    registerChildUpdate = register
-}
+): FunctionalReaktProps<Data> = FunctionalReaktProps(
+    id,
+    data,
+    scope,
+    forceUpdate,
+    updateParent,
+    register,
+    boundary
+)
 @FunctionalReaktPropsDsl
 fun <Data : RState> FunctionalReaktProps<Data>.forceUpdate(
     force: (ID, Data) -> Boolean
-) {
-    forceUpdate = force
-}
+): FunctionalReaktProps<Data> = FunctionalReaktProps(
+    id,
+    data,
+    scope,
+    force,
+    updateParent,
+    registerChildUpdate,
+    boundary
+)
 
 
 
