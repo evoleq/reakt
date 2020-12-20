@@ -43,6 +43,18 @@ abstract class FunctionalReaktComponent<Data : RState>(
     }
     
     /**
+     *
+     */
+    @EvoleqDsl
+    fun data(): Data = properties.data
+    
+    /**
+     *
+     */
+    @BoundaryDsl
+    fun boundary(): Boundary = properties.boundary
+    
+    /**
      * Update the component.
      * This function
      * 1. applies the update to props.data
@@ -84,6 +96,8 @@ abstract class FunctionalReaktComponent<Data : RState>(
         }
         return data
     }
+    
+    
 }
 
 class ParentId
