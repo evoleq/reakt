@@ -19,7 +19,10 @@ import kotlinx.browser.document
 import react.RBuilder
 import react.dom.render
 
+@DslMarker
+annotation class ReaktDsl
 
+@ReaktDsl
 fun root(elementId: String = "root", block: RBuilder.()->Unit) = render(document.getElementById(elementId)){
     block()
 }
