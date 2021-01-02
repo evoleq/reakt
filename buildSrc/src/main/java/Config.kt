@@ -2,21 +2,21 @@ object Config {
 
     object Project {
         const val group = "org.evoleq"
-        const val version = "1.0.1"
+        const val version = "1.0.2"
         const val artifactId = "reakt"
     }
 
     object Versions {
 
-        const val kotlin = "1.4.0"
-        const val coroutines = "1.3.9"
+        const val kotlin = "1.4.21"
+        const val coroutines = "1.4.1"
 
-        const val evoleqCore = "2.0.0-alpha"
+        const val evoleqCore = "2.0.1-alpha"
 
-        const val configurations = "2.0.0-alpha"
-        const val dynamics = "2.0.0-alpha"
+        const val configurations = "2.0.1-alpha"
+        const val dynamics = "2.0.1-alpha"
 
-        const val matcat =  "1.0.1"
+        const val matcat =  "1.0.2"
     }
 
     object Dependencies {

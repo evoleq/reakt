@@ -1,6 +1,6 @@
 plugins {
     //java
-    kotlin("multiplatform") version "1.4.0"//"1.3.70"
+    kotlin("multiplatform") version "1.4.21"//"1.3.70"
     id ("com.github.hierynomus.license") version "0.15.0"
     `maven-publish`
     maven
@@ -14,8 +14,10 @@ version = Config.Project.version
 
 repositories {
     mavenLocal()
-    maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
-    maven("https://kotlin.bintray.com/kotlin-js-wrappers/")
+    maven("https://kotlin.bintray.com/kotlinx")
+    maven("https://kotlin.bintray.com/kotlin-js-wrappers")
+    maven("https://kotlin.bintray.com/kotlin-eap")
+    maven("https://kotlin.bintray.com/kotlin-dev")
     mavenCentral()
     jcenter()
 }
@@ -44,16 +46,16 @@ kotlin {
             // evoleq
             implementation(Config.Dependencies.evoleqCoreJs) // need evolving type
             implementation(Config.Dependencies.dynamicsJs) // need ids
-            implementation(Config.Dependencies.configurationsJs)
+            implementation(Config.Dependencies.configurationsJs) // need configurations
             implementation("org.evoleq:mathcat-result-js:${Config.Versions.matcat}")
          
             
             //React, React DOM + Wrappers
-            implementation("org.jetbrains:kotlin-react:16.13.1-pre.110-kotlin-1.4.0")
-            implementation("org.jetbrains:kotlin-react-dom:16.13.1-pre.110-kotlin-1.4.0")
+            implementation("org.jetbrains:kotlin-react:17.0.0-pre.134-kotlin-1.4.21")
+            implementation("org.jetbrains:kotlin-react-dom:17.0.0-pre.134-kotlin-1.4.21")
           //  implementation("org.jetbrains:kotlin-react-router-dom:5.1.2-pre.123-kotlin-1.4.10")
-            implementation(npm("react", "16.13.1"))
-            implementation(npm("react-dom", "16.13.1"))
+            implementation(npm("react", "^17.0.0"))
+            implementation(npm("react-dom", "^17.0.0"))
          
         }
     }
