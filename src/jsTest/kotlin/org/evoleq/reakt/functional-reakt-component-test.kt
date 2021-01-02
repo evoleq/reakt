@@ -5,6 +5,8 @@ package org.evoleq.reakt
 import kotlinx.browser.document
 import kotlinx.coroutines.*
 import kotlinx.html.id
+import org.drx.dynamics.Dynamic
+import org.drx.dynamics.exec.blockUntil
 import react.RBuilder
 import react.dom.h1
 import kotlin.test.Test
@@ -54,10 +56,7 @@ class FunctionalReaktComponentTest {
     
     @Test
     fun onUpdate () = runTest{
-       // val div = document.createElement("div")
-       // document.body!!.appendChild(div)
-       // div.setAttribute("id", "root")
-        var done = false
+        val doneDynamic by Dynamic(false)
         val job = GlobalScope.launch {
             root {
                 testComponent {
@@ -72,39 +71,17 @@ class FunctionalReaktComponentTest {
                     }.
                     forceUpdate{ _,_ -> true}
                 }
-                
             }
-            done = true
+            doneDynamic.value = true
         }
-        /*
-        while (!done) {
-            
-            delay(100)
-        }
+        blockUntil(doneDynamic){v -> v}
         
-         */
         val h = document.getElementById("headline")
         assertNotNull(h)
        // assertTrue(false)
         delay(1000)
-       // job.cancel()
+        job.cancel()
        
-    }
-    
-    /*
-    fun runTest(test: suspend ()->Unit) = GlobalScope.promise {
-        test()
-        
-    }
-    
-     */
-    
-    fun runTest(mountPoint: String = "root" ,test: suspend ()->Unit) = GlobalScope.promise {
-        val div = document.createElement("div")
-        document.body!!.appendChild(div)
-        div.setAttribute("id", mountPoint)
-        test()
-        
     }
 }
     
