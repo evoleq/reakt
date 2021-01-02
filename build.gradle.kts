@@ -42,8 +42,8 @@ kotlin {
             implementation(kotlin("stdlib-js"))
 
             // evoleq
-            implementation(Config.Dependencies.evoleqCoreJs)
-            implementation(Config.Dependencies.dynamicsJs)
+            implementation(Config.Dependencies.evoleqCoreJs) // need evolving type
+            implementation(Config.Dependencies.dynamicsJs) // need ids
             implementation(Config.Dependencies.configurationsJs)
             implementation("org.evoleq:mathcat-result-js:${Config.Versions.matcat}")
          

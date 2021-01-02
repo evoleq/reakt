@@ -28,36 +28,36 @@ data class FunctionalReaktProps<Data : RState>(
     /**
      * Id of the Component
      */
-    open var id: ID,
+    val id: ID,
     
     /**
      * component-specific data
      */
-    open var data: Data,
+    var data: Data,
     
     /**
      * [CoroutineScope] the component shall use, its default is CoroutineScope(Job())
      */
-    open var scope: CoroutineScope = CoroutineScope(Job()),
+    val scope: CoroutineScope = CoroutineScope(Job()),
     
     /**
      * Eventually force an update of the [FunctionalReaktComponent],
      * If forceUpdate(id,data) = true, then the function [RComponent.forceUpdate()] is called
      */
-    open var forceUpdate: (ID, Data) -> Boolean = { _, _ -> false },
+    val forceUpdate: (ID, Data) -> Boolean = { _, _ -> false },
     
     /**
      * Update parent component.
      */
-    open var updateParent: (ID, suspend CoroutineScope.(Data) -> Data) -> Unit = { _, _ -> Unit },
+    val updateParent: (ID, suspend CoroutineScope.(Data) -> Data) -> Unit = { _, _ -> Unit },
     
     /**
      * Register update-function of a child-component
      */
-    open var registerChildUpdate: (ChildId<*>, (ID, suspend CoroutineScope.(Any) -> Any)-> Evolving<Any>)->Unit = {_,_ -> Unit},
+    val registerChildUpdate: (ChildId<*>, (ID, suspend CoroutineScope.(Any) -> Any)-> Evolving<Any>)->Unit = {_,_ -> Unit},
     
     /**
      * [Boundary] of the component
      */
-    open var boundary: Boundary = Boundary()
+    val boundary: Boundary = Boundary()
 ) : RProps
