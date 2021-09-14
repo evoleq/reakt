@@ -19,6 +19,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import org.drx.dynamics.ID
 import org.drx.evoleq.evolving.Evolving
+import org.evoleq.reakt.texts.EmptyTexts
+import org.evoleq.reakt.texts.Locale
+import org.evoleq.reakt.texts.Texts
 import react.RProps
 import react.RState
 
@@ -59,5 +62,7 @@ data class FunctionalReaktProps<Data : RState>(
     /**
      * [Boundary] of the component
      */
-    val boundary: Boundary = Boundary()
+    val boundary: Boundary = Boundary(),
+    
+    val texts: () -> Texts = { EmptyTexts }
 ) : RProps

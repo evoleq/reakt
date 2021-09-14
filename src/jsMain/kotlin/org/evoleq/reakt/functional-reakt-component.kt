@@ -20,6 +20,7 @@ import org.drx.dynamics.ID
 import org.drx.evoleq.dsl.EvoleqDsl
 import org.drx.evoleq.evolving.Evolving
 import org.drx.evoleq.evolving.parallel
+import org.evoleq.reakt.texts.Texts
 import react.RComponent
 import react.RState
 
@@ -47,6 +48,13 @@ abstract class FunctionalReaktComponent<Data : RState>(
      */
     @EvoleqDsl
     fun data(): Data = properties.data
+    
+    /**
+     *
+     */
+    @EvoleqDsl
+    @Suppress("unchecked_cast")
+    fun <T: Texts> texts(): T = properties.texts() as T
     
     /**
      *

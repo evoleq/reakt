@@ -18,6 +18,8 @@ package org.evoleq.reakt
 import kotlinx.coroutines.CoroutineScope
 import org.drx.dynamics.ID
 import org.drx.evoleq.evolving.Evolving
+import org.evoleq.reakt.texts.Locale
+import org.evoleq.reakt.texts.Texts
 import react.RState
 
 @DslMarker
@@ -34,7 +36,8 @@ fun <Data : RState> FunctionalReaktProps<Data>.id(
     forceUpdate,
     updateParent,
     registerChildUpdate,
-    boundary
+    boundary,
+    texts
 )
 /*{
     //this@id.id = id()
@@ -52,7 +55,8 @@ fun <Data : RState> FunctionalReaktProps<Data>.scope(
     forceUpdate,
     updateParent,
     registerChildUpdate,
-    boundary
+    boundary,
+    texts
 )
 
 @FunctionalReaktPropsDsl
@@ -65,7 +69,8 @@ fun <Data : RState> FunctionalReaktProps<Data>.data(
     forceUpdate,
     updateParent,
     registerChildUpdate,
-    boundary
+    boundary,
+    texts
 )
 
 @FunctionalReaktPropsDsl
@@ -78,7 +83,8 @@ fun <Data : RState> FunctionalReaktProps<Data>.updateParent(
     forceUpdate,
     update,
     registerChildUpdate,
-    boundary
+    boundary,
+    texts
 )
 
 @FunctionalReaktPropsDsl
@@ -91,7 +97,8 @@ fun <Data: RState> FunctionalReaktProps<Data>.registerChildUpdate(
     forceUpdate,
     updateParent,
     register,
-    boundary
+    boundary,
+    texts
 )
 @FunctionalReaktPropsDsl
 fun <Data : RState> FunctionalReaktProps<Data>.forceUpdate(
@@ -103,7 +110,22 @@ fun <Data : RState> FunctionalReaktProps<Data>.forceUpdate(
     force,
     updateParent,
     registerChildUpdate,
-    boundary
+    boundary,
+    texts
+)
+
+@FunctionalReaktPropsDsl
+fun <Data : RState, T : Texts> FunctionalReaktProps<Data>.texts(
+    texts: () -> T
+): FunctionalReaktProps<Data> = FunctionalReaktProps(
+    id,
+    data,
+    scope,
+    forceUpdate,
+    updateParent,
+    registerChildUpdate,
+    boundary,
+    texts
 )
 
 
